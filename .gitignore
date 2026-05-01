@@ -1,0 +1,55 @@
+# Secrets — NEVER commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+*-secrets/
+*credentials*
+*token*
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Obsidian local-only
+.obsidian/workspace*
+.obsidian/cache
+.obsidian/plugins/*/data.json
+
+# AI tool local state
+.claude/cache/
+.claude/sessions/
+.smart-env/
+.wrangler/
+
+# Personal content this template doesn't ship with
+# (you'll fork and add your own — but don't push these to your fork's main branch
+#  unless you're explicit about what's safe)
+calendar/
+raw/screenshots/
+raw/uploads/
+raw/data/
+raw/articles/
+raw/meeting-logs/
+clients/
+missions/
+archive/
+
+# Hold on — read this:
+# The directories above are gitignored in this PUBLIC TEMPLATE because they
+# typically hold private content. When you clone this repo into your own
+# private command center, you'll likely want to UN-ignore some of them
+# (calendar/, missions/, archive/) since your private repo can hold them
+# safely. The public template ships with empty directories you populate.
+#
+# Rule of thumb: if your repo is PRIVATE, ignore only secrets + OS cruft.
+# If your repo is PUBLIC, ignore everything that contains real-world data
+# about real-world businesses or people.

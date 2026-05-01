@@ -1,0 +1,6 @@
+.git/
+.gitignore
+.obsidianignore
+node_modules/
+*.log
+.claude/cache/
