@@ -1,6 +1,6 @@
 # CLAUDE.md — Command Center Schema
 
-> This file is the **schema layer** for your unified command center — a Karpathy-style markdown + filesystem knowledge base built for a human captain plus a crew of AI agents.
+> The schema layer for `command` — a markdown + filesystem knowledge base built for a human captain plus a crew of AI agents.
 >
 > Claude (or any AI tool with filesystem access) reads this first to know where files go, how to navigate, and what operations are available.
 
@@ -9,10 +9,10 @@
 ## Structure
 
 ```
-command/                                  ← your working folder + Obsidian vault (optional)
+command/                                  ← your working folder + Obsidian vault
 ├── CLAUDE.md           ← You are here (schema layer — the rules of this room)
 ├── index.md            ← Machine-maintained catalog of wiki/ pages
-├── log.md              ← Append-only activity log
+├── log.md              ← Append-only activity log — one line per operation
 │
 ├── raw/                ← IMMUTABLE source material (you add, AI reads, never edits in place)
 │   ├── articles/       ← PDFs, research docs, web clips, agreements
@@ -25,24 +25,25 @@ command/                                  ← your working folder + Obsidian vau
 │   ├── ventures/       ← One entity page per venture you own
 │   ├── clients/        ← One entity page per paid client
 │   ├── people/         ← One entity page per person in your orbit
-│   └── concepts/       ← Cross-cutting topics, syntheses, research notes
+│   └── concepts/       ← Cross-cutting topics, syntheses, research
 │
 ├── missions/           ← Thin files linking to your PM tool's tickets
-├── calendar/           ← Daily notes, journal (human-authored)
-├── atlas/              ← Navigation MOCs, dashboards, maps of the territory
+├── atlas/              ← Navigation maps + dashboards (MOCs)
 ├── templates/          ← Reusable templates (meeting notes, mission files, etc.)
 │
-├── ventures/           ← Code + ops (links to your venture git repos, project notes)
-├── clients/            ← Client project files (private context, not client-shared deliverables)
-├── tools/              ← Your reusable scripts and utilities
+├── ventures/           ← Code links + ops + decisions per venture you own
+├── clients/            ← Paid engagement files (private context, not deliverables)
+├── tools/              ← Reusable scripts, utilities, custom AI skills, MCP integrations
 └── archive/            ← Deprecated, completed, or one-off material
 ```
+
+**Note on `log.md` vs the rest of the folder:** `log.md` is a single root-level file holding a one-line, append-only timeline of operations. It's the captain's running narrative — machine-readable, dated, dense. If you want longer-form journaling, put it in `wiki/concepts/journal/` or `atlas/`. Keep `log.md` lean.
 
 ---
 
 ## File Placement Decision Tree
 
-When creating or saving a new file, follow this:
+When creating or saving a new file:
 
 ```
 Is it source material (PDF, transcript, screenshot, CSV, raw doc)?
@@ -54,14 +55,11 @@ Is it compiled knowledge (summary, entity page, research synthesis)?
 Is it a mission/project tracker (linked to your PM tool)?
   → missions/  (must link to a PM ticket)
 
-Is it a daily note or journal entry?
-  → calendar/
-
-Is it a navigation/dashboard page?
+Is it a navigation/dashboard page or map of content?
   → atlas/
 
 Is it code, scripts, or operational project files?
-  → ventures/, clients/, or tools/
+  → ventures/ (yours), clients/ (paid), or tools/ (reusable)
 
 Is it old, done, or one-off?
   → archive/
@@ -76,7 +74,7 @@ None of the above?
 
 ---
 
-## Four Operations (Karpathy Pattern)
+## The four core operations (Karpathy pattern)
 
 ### Ingest
 When the captain adds new source material to `raw/`:
@@ -87,7 +85,7 @@ When the captain adds new source material to `raw/`:
 5. Append a log entry to `log.md`.
 
 ### Query
-When the captain asks questions against the knowledge base:
+When the captain asks a question against the knowledge base:
 1. Search relevant `wiki/` and `raw/` pages first.
 2. Synthesize answer with citations to specific files.
 3. If the answer produces valuable new knowledge, create a wiki page for it.
@@ -109,7 +107,69 @@ Check structural health periodically:
 
 ---
 
-## index.md Maintenance
+## The three operator extensions
+
+`command` is built for shipping, not just note-taking. These three operations sit alongside the Karpathy four:
+
+### Build
+The captain says *"build me a thing."* The AI tool reads `CLAUDE.md` + relevant `wiki/` pages, then:
+1. Drops scripts in `tools/` or scaffolds a new venture in `ventures/<name>/`.
+2. Writes a `decisions.md` entry capturing what was built and why.
+3. Logs to `log.md`.
+
+### Deploy
+For Cloud-side artifacts (Cloudflare Workers, scheduled jobs, custom MCPs):
+1. AI executes deploy from inside the folder (`wrangler deploy`, `gh deploy`, etc.).
+2. Captures the live URL or status in the relevant `ventures/<name>/_links.md`.
+3. Logs to `log.md` with the deploy timestamp.
+
+### Integrate
+For external services (Linear, Notion, GitHub, your CRM, Cloudflare D1):
+1. Reference integration patterns live in `tools/integrations/`.
+2. MCPs live in `tools/mcps/` (or installed via your AI tool's MCP config).
+3. APIs and SDKs are documented in `wiki/concepts/integrations.md`.
+4. Secrets stay outside the repo (see `## Rules` below).
+
+---
+
+## Three integration patterns — when to use which
+
+The folder talks to the world through three patterns:
+
+| Pattern | When to use | Example |
+|---|---|---|
+| **MCP** (Model Context Protocol) | When you want the AI to **act** on a service (read, write, query) interactively or in a workflow. | Cloudflare MCP for deploys. GitHub MCP for repo navigation. Linear MCP for ticket creation. |
+| **API** | When you want **deterministic** machine-to-machine calls — scheduled jobs, webhooks, server-to-server. | Cloudflare Worker calls Resend API to send email. Cron job calls OpenAI API to summarize yesterday's `log.md`. |
+| **SDK** | When you want **richer** programmatic control or local-first tools. | Anthropic SDK in a `tools/` script. GitHub SDK in a deploy helper. |
+
+Most operations work fine with just MCPs. Reach for APIs when you need scheduled or deterministic. Reach for SDKs when you're building a tool that bundles multiple service calls.
+
+---
+
+## Secrets handling — non-negotiable
+
+**Secrets never live inside this repo.** Period. The `.gitignore` blocks common patterns (`.env`, `*.pem`, `*.key`, `credentials*`, `secrets*`) but those are safety nets, not the contract.
+
+The contract:
+
+```
+~/<your-secrets>/                       (chmod 700, owner-only)
+├── README.md                            (chmod 644 — public docs are fine)
+├── secrets.env                          (chmod 600 — owner-only)
+└── .gitignore                           (chmod 600 — ignores everything)
+```
+
+Then load secrets via shell substitution at the moment of use:
+
+```bash
+export ANTHROPIC_API_KEY=$(grep '^ANTHROPIC_API_KEY=' ~/<your-secrets>/secrets.env | cut -d'=' -f2-)
+```
+
+Never `cat` or `echo` secrets in a way that lands them in a transcript, log, or AI conversation. Treat every API key like a password — because it is one.
+
+---
+
+## index.md maintenance
 
 `index.md` is a machine-maintained catalog. Format:
 
@@ -122,14 +182,14 @@ Check structural health periodically:
 ## wiki/concepts/
 - example-concept.md — One-line description
 ## wiki/people/
-- example-person.md — One-line description
+- example-person.md — Role + relationship
 ```
 
 Update `index.md` after every Ingest or Compile operation. Keep it under 200 lines — it's a catalog, not a dump.
 
 ---
 
-## log.md Maintenance
+## log.md maintenance
 
 Append-only. One line per operation:
 
@@ -137,19 +197,22 @@ Append-only. One line per operation:
 ## [YYYY-MM-DD] operation | description
 ```
 
+Operations: `ingest` · `query` · `compile` · `lint` · `decision` · `ship` · `build` · `deploy` · `integrate`
+
 Example:
 
 ```markdown
 ## [2026-05-01] ingest | Added meeting transcript with potential client
 ## [2026-05-02] compile | Built venture entity page from raw sources
-## [2026-05-03] query | Researched competitive landscape for new product
+## [2026-05-03] deploy | Pushed v0.3 of api-worker to Cloudflare
+## [2026-05-04] decision | Chose Cloudflare D1 over Postgres for low-traffic project
 ```
 
-This becomes the captain's running narrative. AI agents read it to understand recent context.
+This becomes the captain's running narrative. AI agents read it to understand recent context. Newest entries at the top OR the bottom — pick one and stay consistent (most operators do bottom = newest, like a journal).
 
 ---
 
-## Missions Format
+## Missions format
 
 Each mission file is thin — your PM tool is the source of truth. The mission file holds context the PM tool doesn't:
 
@@ -171,17 +234,15 @@ Replace `pm_tool_id` and the link with whatever PM tool you use (Linear, Todoist
 
 ---
 
-## Rules
-
-These are non-negotiable. Hard-coded into how this room operates.
+## Rules — non-negotiable
 
 1. **Captain takes responsibility.** The buck stops at the captain. AI extends, never replaces, the captain's judgment.
 
-2. **Secrets are sacred.** Never read, log, or commit `.env`, `.pem`, `.key`, credentials, tokens, or passwords. They live outside this repo (recommended: `~/<your-name>-secrets/` with `chmod 600`).
+2. **Secrets are sacred.** Never read, log, or commit `.env`, `.pem`, `.key`, credentials, tokens, or passwords. They live outside this repo (see secrets handling section above).
 
 3. **No new files at root.** The root is reserved.
 
-4. **No new top-level directories.** Add a new one only with explicit captain approval and a documented reason.
+4. **No new top-level directories.** Add a new one only with explicit captain approval and a documented reason in `decisions.md`.
 
 5. **Append-only for logs and decisions.** Never rewrite history. Old entries stay readable; new entries explain why something changed.
 
@@ -199,7 +260,7 @@ Customize without breaking the structure:
 - **Add clients:** create `clients/<name>/` with the same shape plus `access-map.md` (who has what credentials)
 - **Add wiki entities:** drop a markdown file in `wiki/people/`, `wiki/concepts/`, etc.
 - **Add templates:** drop reusable patterns in `templates/`
-- **Add tools:** put your scripts in `tools/`
+- **Add tools:** put your scripts in `tools/`. MCPs in `tools/mcps/`. Integrations in `tools/integrations/`.
 
 What you SHOULDN'T do (without thinking):
 
@@ -211,16 +272,16 @@ What you SHOULDN'T do (without thinking):
 
 ## Where this comes from
 
-This pattern was developed by Max Palmer (founder of MaxShip) over years of running businesses where AI agents and human operators share the same knowledge base. It's influenced by:
+This pattern is built on:
 
-- **Andrej Karpathy** — filesystem-as-AI-interface, structure-of-thought, LLM Wikis
+- **Andrej Karpathy** — filesystem-as-AI-interface, structure-of-thought, LLM Wikis. The four core operations originated with this thinking.
 - **Peter Naur** — *Programming as Theory Building* (1985). The captain's vision is the program; code is the shadow.
-- **BAIR / DSPy / Stanford** — *The Shift from Models to Compound AI Systems* (Zaharia, Khattab et al., Feb 2024)
-- **Interpreted Context Methodology (ICM)** — RinDig's open-source articulation
-- **Karpathy's LLM Wiki concept** — personal knowledge base with AI as a continuous reader
+- **BAIR / DSPy / Stanford** — *The Shift from Models to Compound AI Systems* (Zaharia, Khattab et al., Feb 2024).
+- **Anthropic Engineering** — *"the folder and file structure of an agent becomes a form of context engineering."*
+- **Naval Ravikant** — *code is the most powerful form of permissionless leverage.*
 
-If you want the full pedagogy + the Cloud and Bridge layers, that's MaxShip School: [shipwithmax.com](https://shipwithmax.com) (TKTK).
+The full operating model — Command (this folder) + Compute (deployed infrastructure) + Cycle (the daily practice that compounds) — is taught at [max-ship.com](https://max-ship.com).
 
 ---
 
-*Schema v0.1 · 2026-05-01*
+*Schema v0.2 · MIT*
