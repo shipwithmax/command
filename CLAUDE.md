@@ -6,11 +6,24 @@
 
 ---
 
+## Memory model (Anthropic, March 2026+)
+
+This folder works with Anthropic's three-layer memory system:
+
+- **`CLAUDE.md`** (this file) — explicit instructions, routing rules, "how the captain wants things done." Authored by you. Brief, opinionated, high-signal. **Not a knowledge dump.**
+- **`MEMORY.md`** (next to this file) — auto-memory, maintained by Claude. Captures patterns and preferences Claude learns from working with you. Loads first 200 lines at session start.
+- **Chat memory** — cross-session conversation context surfaced by Claude when relevant. Lives in Anthropic's backend.
+
+**Critical:** Routing rules belong here in `CLAUDE.md`. Observed learnings belong in `MEMORY.md`. Don't dump everything you know into either file. The folder structure below holds the bulk of context — these two files are just the operating manual on top.
+
+---
+
 ## Structure
 
 ```
 command/                                  ← your working folder + Obsidian vault
-├── CLAUDE.md           ← You are here (schema layer — the rules of this room)
+├── CLAUDE.md           ← You are here (schema layer — captain authors)
+├── MEMORY.md           ← Auto-memory (Claude maintains)
 ├── index.md            ← Machine-maintained catalog of wiki/ pages
 ├── log.md              ← Append-only activity log — one line per operation
 │

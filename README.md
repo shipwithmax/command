@@ -118,11 +118,24 @@ The structure is opinionated. **That's the point.** Don't fight it for a month, 
 | `tools/` | **Reusable scripts + utilities.** Bash one-liners, deployment helpers, custom AI skills, MCP integrations. The starter Claude Skill `command-init` ships here. |
 | `archive/` | **Old / done / deprecated.** Where finished work goes to rest. |
 
-Three files at root:
+Four files at root:
 
-- [`CLAUDE.md`](./CLAUDE.md) — schema, decision tree, operations, rules. AI reads this first.
+- [`CLAUDE.md`](./CLAUDE.md) — schema, decision tree, operations, rules. **You write this.** AI reads it first every session.
+- [`MEMORY.md`](./MEMORY.md) — auto-memory file. **Claude maintains this**, capturing patterns it learns about how you work. Loads first 200 lines at session start.
 - [`index.md`](./index.md) — machine-maintained catalog of `wiki/` pages.
 - [`log.md`](./log.md) — append-only activity log. One line per operation. The captain's running narrative.
+
+### Anthropic's three-layer memory model (March 2026)
+
+The folder integrates with Anthropic's three-layer memory system:
+
+| Layer | Who writes | What it holds |
+|-------|-----------|---------------|
+| **`CLAUDE.md`** | You (the captain) | Explicit instructions. Routing rules. "How I want things done." Brief, opinionated. **Not a knowledge dump.** |
+| **`MEMORY.md`** | Claude (auto) | Observed patterns and preferences Claude learned from working with you. |
+| **Chat memory** | Claude (cross-session) | Conversation context across sessions, surfaced when relevant. |
+
+**Critical rule:** Routing rules belong in `CLAUDE.md`, not `MEMORY.md`. The captain authors instructions; Claude records observations. Don't conflate the two layers.
 
 ---
 
