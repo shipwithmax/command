@@ -8,11 +8,23 @@ It's the **Command** layer in the *Command · Compute · Cycle* operating model 
 
 ---
 
+## Where this comes from
+
+I built this folder because I was tired of two things at the same time. First — every "AI productivity" tool I tried was a SaaS box that owned my data and reset every time the company changed direction. Second — every prompt I wrote felt like I was re-explaining my business from scratch, even to models I'd been working with for months.
+
+The fix turned out to be simple and structural: **put the business in a folder, give the folder a shape, point your AI at it.** Once the AI could navigate to the right context on its own, my prompts got shorter and the output got dramatically better. Across every model I tried.
+
+I run multiple ventures out of a private version of this folder — board games, AI products, agency engagements, family projects. Same structure, different content. This repo is the public, sanitized template — yours to fork, populate, and make your own.
+
+If you're a solo operator or a small team trying to ship real work with AI as a collaborator (not a toy), this is the substrate that makes that possible.
+
+---
+
 ## Why this exists
 
 When AI output feels junior, the diagnosis is almost always **junior context**. Not a junior model — a junior context window.
 
-The folder is how you give your AI senior context. It's an expansion of [Andrej Karpathy's filesystem-as-AI-interface](https://x.com/karpathy) thinking, built specifically for the operator who's shipping product, talking to customers, and running marketing — not just building agents in isolation.
+The folder is how you give your AI senior context. It's an expansion of [Andrej Karpathy's filesystem-as-AI-interface](https://karpathy.ai) thinking, built specifically for the operator who's shipping product, talking to customers, and running marketing — not just building agents in isolation.
 
 Once you put your strategy, decisions, customer notes, and active projects into a structure your AI can read, every prompt gets dramatically better. **The structure is the contract.** AI tools (Claude Code, Cursor, anything with filesystem access) navigate it the same way you do. They write back to the same files. The folder becomes the operating layer of your business.
 
@@ -24,14 +36,41 @@ Karpathy's pattern is built around four operations on a knowledge folder: **Inge
 
 `command` keeps those four. Then it adds the operator-grade pieces:
 
-- **Live integrations** — connect Linear, Todoist, Notion, GitHub, Cloudflare D1, your CRM. The folder isn't just a notes archive; it's a working surface that your AI agents act through.
-- **Deployable workflows** — `tools/` ships with patterns for spinning up standalone scripts and Cloudflare Workers from inside the folder. Your AI can build, deploy, and iterate without leaving the room.
-- **Project archive** — `archive/` for finished work, `missions/` for active work mapped to your PM tool, `ventures/` and `clients/` for the actual entities you operate.
-- **Obsidian-native** — open the folder in [Obsidian](https://obsidian.md). It's already a vault. `[[wikilinks]]` work. Graph view works. Daily notes work. The folder is markdown; Obsidian is the lens.
-- **Secrets-safe by design** — `.gitignore` blocks common credential patterns. Your `.env` lives outside the repo, not inside.
-- **MCP / API / SDK ready** — three integration patterns spelled out in `CLAUDE.md`: MCPs for AI-driven actions, APIs for direct service calls, SDKs for custom tooling.
+### Live integrations (your folder talks to the world)
 
-It's optimized for **Cloudflare** (Workers, D1, R2, Email Routing) — same stack the rest of MaxShip runs on — but the folder is portable. Use AWS, Vercel, your own VPS. The structure doesn't care.
+- **Cloudflare-deep** — Workers, D1 (serverless SQL for your projects), R2 (zero-egress object storage), Email Routing, Cron triggers, KV. Patterns for each live in `tools/integrations/`. The folder isn't a notes archive — it's the surface from which you deploy infrastructure.
+- **Project management bidirectional** — read from and write to **Linear**, **Todoist**, and **Notion**. Find a Notion page, bring an excerpt into your wiki, push updates back. Create a Linear ticket from a mission file. Sync Todoist tasks with daily logs. Your PM tool of choice stays the source of truth; the folder holds context the PM tool doesn't.
+- **GitHub-native** — repos referenced from `ventures/<name>/_links.md`. AI can navigate your repo tree, run `gh` commands, draft PRs, and update changelogs.
+- **Your CRM, billing, analytics** — pluggable via MCPs (see below). The pattern is consistent: the folder describes the relationship; the integration provides live data.
+
+### Deployable workflows
+
+- `tools/` ships with patterns for spinning up standalone scripts and Cloudflare Workers from inside the folder.
+- `tools/skills/` ships with **Claude Skills** — packaged AI workflows your captain can invoke ("run the `command-init` skill on my first venture").
+- Your AI can build, deploy, and iterate without leaving the room. Deploys log to `log.md` automatically.
+
+### Obsidian-native
+
+The folder IS an Obsidian vault. Open `~/command` in [Obsidian](https://obsidian.md) — `[[wikilinks]]` work, graph view works, daily notes work, plugins work.
+
+Why this matters: **not every interface needs to be vibe-coded.** People build custom dashboards, custom note-taking apps, custom UI for everything when they don't need to. Markdown files in a folder are already a great editing experience. Obsidian gives you that experience for free, with version control and AI navigation underneath. **Don't build a UI when a folder will do.**
+
+### MCP / API / SDK ready
+
+Three integration patterns spelled out in [`CLAUDE.md`](./CLAUDE.md), easy to adjust:
+- **MCPs** for AI-driven actions (Cloudflare, GitHub, Linear, your CRM)
+- **APIs** for deterministic machine-to-machine calls (scheduled jobs, webhooks)
+- **SDKs** for richer programmatic control (custom tools that bundle multiple service calls)
+
+Most operations work with just MCPs. Reach for APIs when you need scheduled or deterministic. Reach for SDKs when you're building something rich.
+
+### Secrets-safe by design
+
+`.gitignore` blocks common credential patterns. Your `.env` lives outside the repo, not inside. (See *What's NOT in here* below — there's a real reason for this.)
+
+### Optimized for Cloudflare, portable everywhere else
+
+Same stack the rest of MaxShip runs on. The folder is portable. Use AWS, Vercel, Render, your own VPS. The structure doesn't care.
 
 ---
 
@@ -45,13 +84,16 @@ cd ~/command
 # 2. Open in Claude Code (or your AI tool)
 claude
 
-# 3. Open in Obsidian
+# 3. Open in Obsidian (optional but recommended)
 # File → Open Folder as Vault → ~/command
+
+# 4. Run the command-init skill to bootstrap your first venture
+# In Claude: "Use the command-init skill to set up my first venture"
 ```
 
-Claude reads `CLAUDE.md` first and knows how to navigate. Obsidian reads the markdown directly. You're up.
+Claude reads `CLAUDE.md` first and knows how to navigate. Obsidian reads the markdown directly. The `command-init` skill walks you through populating `ventures/<your-thing>/` with your actual project in 2 minutes.
 
-Then start populating:
+Then keep going:
 - `ventures/` for things you own
 - `clients/` for paid engagements
 - `wiki/people/` for everyone in your orbit
@@ -73,7 +115,7 @@ The structure is opinionated. **That's the point.** Don't fight it for a month, 
 | `missions/` | **Thin pointers to your PM tool.** One file per Linear / Todoist / Notion ticket. Holds context the PM tool doesn't. |
 | `atlas/` | **Navigation maps + dashboards.** Maps of the territory — *"All my active engagements"*, *"All ventures by status"*. |
 | `templates/` | **Reusable patterns** — meeting notes, mission files, decision entries. |
-| `tools/` | **Reusable scripts + utilities.** Bash one-liners, deployment helpers, custom AI skills. |
+| `tools/` | **Reusable scripts + utilities.** Bash one-liners, deployment helpers, custom AI skills, MCP integrations. The starter Claude Skill `command-init` ships here. |
 | `archive/` | **Old / done / deprecated.** Where finished work goes to rest. |
 
 Three files at root:
@@ -105,9 +147,42 @@ These are taught in detail in MaxShip's Week 1 course material.
 
 ## What's NOT in here
 
-- **Credentials, API tokens, passwords.** They live outside this repo. Recommended convention: `~/<your-secrets>/` with `chmod 700` on the directory and `chmod 600` on individual files. The `.gitignore` here blocks common patterns to catch accidents — but the contract is *you keep secrets out of this folder, period.*
-- **Project code.** Your ventures' actual codebases live in their own GitHub repos, referenced from `ventures/<name>/_links.md`.
-- **Client-confidential material.** This is a public template. The real `command/` you build will hold sensitive context — that's why it stays a private repo on your machine.
+### No credentials. Ever.
+
+API tokens, passwords, .env files, private keys, OAuth secrets — none of it lives in this repo. The `.gitignore` blocks common patterns as a safety net, but the real contract is a habit: **secrets live outside.**
+
+There are five reasons this matters more than it sounds:
+
+1. **Git history is forever.** If you ever commit a token, even if you delete the file in the next commit, the token is permanently in git history. Anyone who clones the repo at any past commit gets it. Public repos? Scraped within minutes by automated bots that mine GitHub for tokens to abuse.
+2. **AI agents have filesystem access.** If Claude can read your folder, it can also accidentally include credential strings in outputs (logs, summaries, transcripts to other people). Keep secrets outside the folder and that whole class of leak becomes structurally impossible.
+3. **Audit isolation.** When something goes wrong — a token gets compromised, a service is breached — you need to rotate fast. If credentials are scattered across project repos, audit is a nightmare. Centralized in `~/<your-name>-secrets/`, audit is trivial.
+4. **Permission isolation.** A folder at `~/<your-name>-secrets/` with `chmod 700` (owner-only access) is OS-enforced. Inside a project repo, file permissions get inconsistent — you push to GitHub, fork to a teammate, sync to a backup, and suddenly a `.env` is on three machines with different ACLs.
+5. **Versioning is the wrong tool for credentials.** You don't want a history of every API key you've ever used. You want the *current* key, in one place, easy to rotate. Git is great for code; it's wrong for secrets.
+
+The recommended pattern:
+
+```
+~/<your-name>-secrets/                  (chmod 700, owner-only)
+├── README.md                            (documentation, fine to read)
+├── secrets.env                          (chmod 600, owner-only)
+└── .gitignore                           (ignores everything — even if you accidentally `git init` here)
+```
+
+Load secrets at the moment of use, via shell substitution. **Never `cat`, `echo`, or paste them into a transcript.**
+
+```bash
+export ANTHROPIC_API_KEY=$(grep '^ANTHROPIC_API_KEY=' ~/<your-name>-secrets/secrets.env | cut -d'=' -f2-)
+```
+
+Treat every API key like a password. Because it is one.
+
+### No project code
+
+Your ventures' actual codebases live in their own GitHub repos, referenced from `ventures/<name>/_links.md`. The folder holds *context, decisions, ops notes* — not source code. (Tools and scripts in `tools/` are an exception — those are reusable utilities, not project code.)
+
+### No client-confidential material
+
+This is a public template. The real `command/` you build will hold sensitive context — that's why your version stays a private repo on your machine. Use this template as the seed; replace it with your own private fork the moment you start putting real work in.
 
 ---
 
@@ -119,21 +194,16 @@ MIT. Use it. Fork it. Make it yours. Tell us what you change.
 
 ## Credits
 
-This pattern was developed and stress-tested across multiple operating businesses. It's influenced by — and stands on the shoulders of — these thinkers and frameworks:
+This pattern stands on the shoulders of:
 
 - **[Andrej Karpathy](https://karpathy.ai)** — filesystem-as-AI-interface, structure-of-thought, the LLM Wiki concept. The original lever this whole approach turns on.
 - **Peter Naur · *Programming as Theory Building* (1985)** — the captain's vision is the program. Code is the shadow. Theory must live somewhere your AI can read.
-- **BAIR / Stanford / DSPy — *The Shift from Models to Compound AI Systems*** (Zaharia, Khattab et al., Feb 2024) — small composed systems beat monoliths. The folder is how you compose.
-- **Anthropic Engineering** — *"the folder and file structure of an agent becomes a form of context engineering"* — independent convergence on the same pattern.
-- **Naval Ravikant** — *code is the most powerful form of permissionless leverage.* Permissionless leverage starts with owning your structure.
+- **BAIR / Stanford / DSPy** — *The Shift from Models to Compound AI Systems* (Zaharia, Khattab et al., Feb 2024). Small composed systems beat monoliths.
+- **Anthropic Engineering** — *"the folder and file structure of an agent becomes a form of context engineering."* Independent convergence on the same pattern.
+- **Naval Ravikant** — *code is the most powerful form of permissionless leverage.*
 - **Interpreted Context Methodology (ICM)** — RinDig's open-source articulation of structured-context-for-AI.
 
-### Personal shoutouts
-
-- **George Collins** — for the long conversations on structured AI input vs. junior output. Pushed the diagnosis until it was clean: it's the context, not the model.
-- **Kevin** — for the systems-design lens on integrating cloud infrastructure with AI navigation. Shaped how `tools/` and `ventures/` connect.
-
-Both are sharper than I am on AI development and architecture. A lot of what's in `CLAUDE.md` is the residue of arguments with them.
+And thanks to **George** and **Kevin** — for the long conversations that helped me keep this system built well and secure.
 
 ---
 
@@ -143,6 +213,8 @@ This repo gets pushed updates roughly once a month, announced on [@shipwithmax](
 
 The full operating model — Command (this folder) + Compute (Cloudflare + AI) + Cycle (the daily practice that compounds) — is taught at [max-ship.com](https://max-ship.com). The folder works on its own. It works *better* when you also build the Compute layer and run the Cycle.
 
+— Max
+
 ---
 
-*v0.2 · public release · MIT*
+*v0.3 · public release · MIT*

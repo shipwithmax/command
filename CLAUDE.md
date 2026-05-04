@@ -107,6 +107,19 @@ Check structural health periodically:
 
 ---
 
+## Skills — invokable workflows
+
+`command` ships with **Claude Skills** in `tools/skills/`. Each skill is a self-contained workflow Claude can invoke when the captain asks for it. Read `tools/skills/<skill-name>/SKILL.md` to know what a skill does and how to execute it.
+
+The captain invokes a skill by phrasing — *"run the X skill"*, *"use X to do Y"*, or just describing the task. Match the closest skill from `tools/skills/` and follow the SKILL.md instructions step-by-step.
+
+**Shipped:**
+- `command-init` — bootstrap a venture folder (asks 4 questions, creates `ventures/<slug>/` + wiki entry + log line + index update)
+
+**Roadmap (later versions):** `client-init`, `ingest-meeting`, `daily-brief`, `lint-folder`, `deploy-worker`. See `tools/skills/README.md` for the full list and how to write your own.
+
+---
+
 ## The three operator extensions
 
 `command` is built for shipping, not just note-taking. These three operations sit alongside the Karpathy four:
@@ -260,7 +273,7 @@ Customize without breaking the structure:
 - **Add clients:** create `clients/<name>/` with the same shape plus `access-map.md` (who has what credentials)
 - **Add wiki entities:** drop a markdown file in `wiki/people/`, `wiki/concepts/`, etc.
 - **Add templates:** drop reusable patterns in `templates/`
-- **Add tools:** put your scripts in `tools/`. MCPs in `tools/mcps/`. Integrations in `tools/integrations/`.
+- **Add tools:** put your scripts in `tools/`. Claude Skills in `tools/skills/<skill-name>/SKILL.md`. MCPs in `tools/mcps/`. Integrations in `tools/integrations/`.
 
 What you SHOULDN'T do (without thinking):
 
