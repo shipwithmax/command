@@ -174,9 +174,11 @@ Most operations work fine with just MCPs. Reach for APIs when you need scheduled
 
 ## Secrets handling — non-negotiable
 
-**Secrets never live inside this repo.** Period. The `.gitignore` blocks common patterns (`.env`, `*.pem`, `*.key`, `credentials*`, `secrets*`) but those are safety nets, not the contract.
+**Secrets never live inside this repo.** Period. The `.gitignore` blocks common patterns (`.env`, `*.pem`, `*.key`, `credentials*`, `secrets*`) but those are *commit* safety nets, not *agent-read* blocks. An agent with filesystem access can read a gitignored file just fine.
 
-The contract:
+The contract has three layers:
+
+### Layer 1 — secrets live outside the repo
 
 ```
 ~/<your-secrets>/                       (chmod 700, owner-only)
@@ -185,13 +187,72 @@ The contract:
 └── .gitignore                           (chmod 600 — ignores everything)
 ```
 
-Then load secrets via shell substitution at the moment of use:
+Load secrets via shell substitution at the moment of use, never as long-lived `export`s:
 
 ```bash
-export ANTHROPIC_API_KEY=$(grep '^ANTHROPIC_API_KEY=' ~/<your-secrets>/secrets.env | cut -d'=' -f2-)
+ANTHROPIC_API_KEY=$(grep '^ANTHROPIC_API_KEY=' ~/<your-secrets>/secrets.env | cut -d'=' -f2-) my-tool
 ```
 
-Never `cat` or `echo` secrets in a way that lands them in a transcript, log, or AI conversation. Treat every API key like a password — because it is one.
+### Layer 2 — hard-coded agent path block
+
+Add this block to your CLAUDE.md (yes, here — adapt the paths to your machine):
+
+```
+## Agent access rules — non-negotiable
+
+Agents must never read, list, or summarize files under:
+- ~/<your-secrets>/                              (any path under your secrets folder)
+- Any path matching .env, *.pem, *.key, credentials*, secrets*
+- Any environment variable matching *_API_KEY, *_TOKEN, *_SECRET, *_PASSWORD
+
+If asked to access these, refuse and tell the captain.
+```
+
+This is the rule the agent actually reads and obeys. `.gitignore` does nothing here — it's invisible to the agent at runtime.
+
+### Layer 3 — platform bindings for deployed code
+
+For anything that runs on Cloudflare (Workers, Pages, Functions), set secrets via `wrangler secret put SECRET_NAME` and access them in code via the binding:
+
+```js
+export default {
+  async fetch(request, env) {
+    const key = env.ANTHROPIC_API_KEY;  // never on disk, never in repo
+    // ...
+  }
+}
+```
+
+Same idea for AWS (Secrets Manager + IAM), GCP (Secret Manager), Vercel (encrypted env vars). **A bound secret is a secret an agent cannot exfiltrate by browsing your repo** — there's nothing to read. Pattern lives in `tools/integrations/cloudflare-secrets.md`.
+
+Never `cat`, `echo`, or paste a secret in a way that lands it in a transcript. Treat every API key like a password — because it is one.
+
+---
+
+## IP and trade-secret carve-out
+
+The folder is your context substrate. That's a great trade for strategy, decisions, customer notes, marketing — context that makes your AI sharper. It is **not** a great trade for material that constitutes your actual moat:
+
+- Patentable mechanisms not yet filed
+- Trade-secret formulations, recipes, or proprietary algorithms
+- Material non-public information (M&A, financials, pre-announcement)
+- NDA-restricted third-party IP
+
+For these, use a separate carve-out folder outside the agent-readable tree, with a hard-coded agent block (same pattern as the secrets block above). When in doubt about whether something is moat-grade IP versus normal context, **ask the captain before saving it into the wiki.**
+
+---
+
+## Production gates — agent ships, human merges
+
+If pushing to `main` triggers an auto-deploy, the deploy gate has to live in git, not in the agent's good intentions. Default rules for any repo where the agent has push access:
+
+1. **Branch protection on `main`** — no direct pushes, ever.
+2. **PR-only flow** — agent commits to a feature branch and opens a PR; the captain (or a second authenticated identity) reviews and merges.
+3. **Required CI checks** — at minimum lint + typecheck; ideally tests too.
+4. **No `--force` on `main`** — refuse the request even if asked.
+5. **Auto-deploy runs only on `main`** — and `main` is reachable only via merged PR.
+
+Translation: agents propose, humans dispose. The PR is the seam between "AI suggested this change" and "this change is now live in production."
 
 ---
 
@@ -264,17 +325,21 @@ Replace `pm_tool_id` and the link with whatever PM tool you use (Linear, Todoist
 
 1. **Captain takes responsibility.** The buck stops at the captain. AI extends, never replaces, the captain's judgment.
 
-2. **Secrets are sacred.** Never read, log, or commit `.env`, `.pem`, `.key`, credentials, tokens, or passwords. They live outside this repo (see secrets handling section above).
+2. **Secrets are sacred.** Never read, log, summarize, or commit `.env`, `.pem`, `.key`, credentials, tokens, or passwords — whether from disk *or* from shell environment variables. They live outside this repo behind a hard-coded agent path block (see secrets handling section above). `.gitignore` is not a substitute for the path block.
 
-3. **No new files at root.** The root is reserved.
+3. **Trade-secret carve-out is sacred.** The folder is for context. Patentable IP, trade-secret formulations, MNPI, and NDA-protected material live in a separate carve-out folder with its own hard-coded agent block. When unsure, ask the captain before writing.
 
-4. **No new top-level directories.** Add a new one only with explicit captain approval and a documented reason in `decisions.md`.
+4. **Agents propose, humans merge.** Never push directly to `main` on any deploy-connected repo. PR-only. The deploy gate lives in git, not in the prompt.
 
-5. **Append-only for logs and decisions.** Never rewrite history. Old entries stay readable; new entries explain why something changed.
+5. **No new files at root.** The root is reserved.
 
-6. **AI quality = context quality.** If the AI is producing junior-level output, the diagnosis is almost always junior-level context. Improve the folder before blaming the model.
+6. **No new top-level directories.** Add a new one only with explicit captain approval and a documented reason in `decisions.md`.
 
-7. **Markdown first.** No proprietary formats for knowledge. Plain text in version control beats every "knowledge base SaaS" on the planet.
+7. **Append-only for logs and decisions.** Never rewrite history. Old entries stay readable; new entries explain why something changed.
+
+8. **AI quality = context quality.** If the AI is producing junior-level output, the diagnosis is almost always junior-level context. Improve the folder before blaming the model.
+
+9. **Markdown first.** No proprietary formats for knowledge. Plain text in version control beats every "knowledge base SaaS" on the planet.
 
 ---
 

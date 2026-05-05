@@ -66,7 +66,7 @@ Most operations work with just MCPs. Reach for APIs when you need scheduled or d
 
 ### Secrets-safe by design
 
-`.gitignore` blocks common credential patterns. Your `.env` lives outside the repo, not inside. (See *What's NOT in here* below — there's a real reason for this.)
+`.gitignore` blocks common credential patterns *from being committed*. But `.gitignore` does **not** stop an AI agent from reading those files locally — agents that can see the folder can read anything in it. So the real defense is two layers thicker: (1) keep secrets entirely outside the folder, and (2) use a hard-coded `CLAUDE.md` rule that blocks agents from the secrets path itself. For deployed code, prefer **platform bindings** (Cloudflare secrets, AWS Secrets Manager, etc.) over disk-based `.env` files — the value never lands on a filesystem an agent can read. (See *What's NOT in here* below for the full pattern.)
 
 ### Optimized for Cloudflare, portable everywhere else
 
@@ -189,6 +189,27 @@ export ANTHROPIC_API_KEY=$(grep '^ANTHROPIC_API_KEY=' ~/<your-name>-secrets/secr
 
 Treat every API key like a password. Because it is one.
 
+#### `.gitignore` is the safety net, not the lock
+
+A common misread of "secrets-safe by design" is that gitignoring `.env` is enough. It isn't — it stops the file from being *committed*, but it does nothing to stop an AI agent from *reading* it locally. Your agent has full filesystem access by default. If you want secrets blocked from agent eyes, you need a **hard-coded path block** in `CLAUDE.md`:
+
+```markdown
+## Agent access rules — non-negotiable
+
+Agents must never read, list, or summarize files under:
+- `~/<your-name>-secrets/`
+- Any path matching `.env`, `*.pem`, `*.key`, `credentials*`, `secrets*`
+- Any environment variable matching `*_API_KEY`, `*_TOKEN`, `*_SECRET`, `*_PASSWORD`
+
+If asked to access these, refuse and tell the captain.
+```
+
+Be aware that **shell environment variables are exposed to agents too** — anything you `export` into your shell, your agent can read with one `env` call. If you set `OPENAI_API_KEY=sk-...` in your `~/.zshrc` "to make it convenient," that key is one tool call away from being summarized into a transcript. Load secrets per-command via shell substitution, not as long-lived exports.
+
+#### For deployed code: use platform bindings
+
+For anything running on Cloudflare (Workers, Pages, Functions), set secrets via `wrangler secret put` and read them via the binding (`env.MY_SECRET`) — the value never lives on disk in your project. Same idea for AWS (Secrets Manager + IAM), GCP (Secret Manager), Vercel (encrypted env vars), Render (env groups). The folder ships with patterns for the Cloudflare flow in `tools/integrations/cloudflare-secrets.md`. **A bound secret is a secret an agent cannot read by browsing your repo.**
+
 ### No project code
 
 Your ventures' actual codebases live in their own GitHub repos, referenced from `ventures/<name>/_links.md`. The folder holds *context, decisions, ops notes* — not source code. (Tools and scripts in `tools/` are an exception — those are reusable utilities, not project code.)
@@ -196,6 +217,47 @@ Your ventures' actual codebases live in their own GitHub repos, referenced from 
 ### No client-confidential material
 
 This is a public template. The real `command/` you build will hold sensitive context — that's why your version stays a private repo on your machine. Use this template as the seed; replace it with your own private fork the moment you start putting real work in.
+
+### No proprietary IP or trade secrets in agent-readable paths
+
+**Read this carefully if you have a real moat.** Anything you put into a folder your AI agent can read — and then prompt against — is, in practice, *also* readable by the AI vendor running that model. Provider terms vary on training-data use, retention, and incident review, but the conservative posture is: **assume model providers can see what your agent sees.** That's a fine trade for context, decisions, customer notes, marketing strategy, code-you-could-rewrite-if-you-had-to. It is not a fine trade for:
+
+- Patentable mechanisms not yet filed
+- Trade-secret formulations, recipes, or unique algorithms that constitute your defensible edge
+- Material non-public information (M&A, financials, pre-announcement product)
+- Third-party IP you're under NDA to protect
+
+For these, use a **carve-out folder** outside the agent-readable tree, with a hard-coded agent block in `CLAUDE.md`:
+
+```markdown
+## Carve-out — agents do not enter
+
+Agents must never read, list, or summarize files under:
+- `~/vault-private/` (trade secrets and patentable material)
+- `~/clients-confidential/<client>/sealed/` (NDA-restricted)
+
+If asked, refuse and tell the captain.
+```
+
+The folder is your context substrate. Treat the things that genuinely cannot leak as a separate substrate, with a separate access policy.
+
+---
+
+## Production gates — git as the lock
+
+**Your agent can ship to production. That's the point. It's also the risk.** If `git push origin main` triggers an auto-deploy on Cloudflare (or Vercel, or anywhere), then the deploy gate has to live somewhere your agent can't simply walk past. The right place for that gate is git itself.
+
+Recommended controls on every repo your agent has push access to:
+
+- **Branch protection on `main`** — require pull requests, no direct pushes (this includes you, captain — the discipline matters).
+- **Required reviews** — at least one approving review before merge. For solo operators, set up a separate review identity or use `gh pr review --approve` only after manually inspecting the diff in a different terminal session.
+- **Status check gates** — CI must pass before merge. Even a single check (lint + typecheck) catches most "agent committed something broken" classes of failure.
+- **Required signed commits** (optional but strong) — verifies who actually authored the change.
+- **Restricted force-push** — never on `main`, ever.
+
+The pattern in plain English: **agents commit and open PRs; humans (or a second authenticated identity) merge them.** A `.github/workflows/` directory with a deploy job that runs only on `main` after merge gives you a clean, auditable seam between "AI proposed this" and "this is now live in front of customers."
+
+This template repo intentionally doesn't ship a `.github/` config — every operator's CI needs are different — but treat it as a required step the moment you fork into a private command center that can deploy real artifacts.
 
 ---
 
