@@ -4,7 +4,7 @@
 
 `command` is a markdown-first, version-controlled, AI-navigable knowledge base — designed to be the **brain** of a small operator's business. One human captain. A crew of AI agents. The same folder structure both navigate.
 
-It's the **Command** layer in the *Command · Compute · Cycle* operating model taught at [MaxShip](https://max-ship.com).
+It's the **Command** layer in the *Command · Compute · Cadence* operating model taught at [MaxShip](https://max-ship.com).
 
 ---
 
@@ -106,17 +106,22 @@ The structure is opinionated. **That's the point.** Don't fight it for a month, 
 
 ## What's in here
 
-| Folder | Purpose |
-|---|---|
-| `raw/` | **Immutable source material.** Articles, transcripts, screenshots, data exports. You add. AI reads. Never edits in place. |
-| `wiki/` | **AI-compiled knowledge.** One entity page per venture, client, person, or concept. AI maintains, you review. Cross-linked with `[[wikilinks]]`. |
-| `ventures/` | **Things you own.** Code links, ops notes, decisions per venture. |
-| `clients/` | **Paid engagements.** Same shape as ventures, different commercial relationship. |
-| `missions/` | **Thin pointers to your PM tool.** One file per Linear / Todoist / Notion ticket. Holds context the PM tool doesn't. |
-| `atlas/` | **Navigation maps + dashboards.** Maps of the territory — *"All my active engagements"*, *"All ventures by status"*. |
-| `templates/` | **Reusable patterns** — meeting notes, mission files, decision entries. |
-| `tools/` | **Reusable scripts + utilities.** Bash one-liners, deployment helpers, custom AI skills, MCP integrations. The starter Claude Skill `command-init` ships here. |
-| `archive/` | **Old / done / deprecated.** Where finished work goes to rest. |
+The kit is organized along the three layers of the Captain's Flywheel — **Command** (this folder + the rest below), **Compute** (the engine), **Cadence** (the rhythms) — plus operational subfolders.
+
+| Folder | Layer | Purpose |
+|---|---|---|
+| `cadence/` | **Cadence** | The master clock — daily / weekly / monthly / quarterly / yearly templates. Edit them as you run the rhythms. |
+| `compute/` | **Compute** | What's actually running for you. Stack catalog. The engine, in writing. |
+| `strategy/` | Command | The captain's slow-cadence job. Active objectives, quarterly rocks, annual themes, monthly review. Pairs with the Strategic cadence. |
+| `raw/` | Command | **Immutable source material.** Articles, transcripts, screenshots, data exports. You add. AI reads. Never edits in place. |
+| `wiki/` | Command | **AI-compiled knowledge.** One entity page per venture, client, person, or concept. AI maintains, you review. Cross-linked with `[[wikilinks]]`. |
+| `ventures/` | Command | **Things you own.** Code links, ops notes, decisions per venture. |
+| `clients/` | Command | **Paid engagements.** Same shape as ventures, different commercial relationship. |
+| `missions/` | Command | **Thin pointers to your PM tool.** One file per Linear / Todoist / Notion ticket. Holds context the PM tool doesn't. |
+| `atlas/` | Command | **Navigation maps + dashboards.** Maps of the territory — *"All my active engagements"*, *"All ventures by status"*. |
+| `templates/` | Command | **Reusable patterns** — meeting notes, mission files, decision entries. |
+| `tools/` | Command | **Reusable scripts + utilities.** Bash one-liners, deployment helpers, custom AI skills, MCP integrations. The starter Claude Skill `command-init` ships here. |
+| `archive/` | Command | **Old / done / deprecated.** Where finished work goes to rest. |
 
 Four files at root:
 
@@ -224,7 +229,7 @@ And thanks to **George** and **Kevin** — for the long conversations that helpe
 
 This repo gets pushed updates roughly once a month, announced on [@shipwithmax](https://youtube.com/@shipwithmax). Watch for `v0.x` tags. Pull as you wish.
 
-The full operating model — Command (this folder) + Compute (Cloudflare + AI) + Cycle (the daily practice that compounds) — is taught at [max-ship.com](https://max-ship.com). The folder works on its own. It works *better* when you also build the Compute layer and run the Cycle.
+The full operating model — Command (this folder) + Compute (Cloudflare + AI) + Cadence (the daily practice that compounds) — is taught at [max-ship.com](https://max-ship.com). The folder works on its own. It works *better* when you also build the Compute layer and run the Cadence.
 
 — Max
 
