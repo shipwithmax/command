@@ -5,7 +5,7 @@ Navigation maps and dashboards. Maps of the territory, not the territory itself.
 Use this folder for:
 
 - Top-level navigation pages — *"Everything I'm currently working on"*
-- Cross-cutting dashboards — *"All my recurring revenue clients"*, *"All ventures by status"*
+- Cross-cutting dashboards — *"All ventures by status"*, *"Every idea I'm still validating"*
 - MOCs (Maps of Content) — Obsidian-style index pages that link out to wiki entries
 - Visualizations of how your business connects to itself
 
@@ -22,9 +22,9 @@ Use this folder for:
 - [[venture-a]] — building, Q3 launch
 - [[venture-b]] — paused
 
-## Clients (paid)
-- [[client-x]] — active retainer
-- [[client-y]] — project-based
+## Ideas (still validating)
+- [[idea-x]] — running a waitlist test
+- [[idea-y]] — researching the market
 
 ## Co-owned (equity / partnership)
 - [[co-owned-thing]]

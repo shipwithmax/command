@@ -6,4 +6,4 @@
 
 ## [YYYY-MM-DD] decision | Initial command center setup
 
-Cloned `shipwithmax/command` and started populating with my own ventures, clients, and people. First entity pages going into `wiki/`.
+Cloned `shipwithmax/command` and started populating with my own ventures, people, and ideas. First entity pages going into `wiki/`.

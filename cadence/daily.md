@@ -7,7 +7,7 @@
 
 Before you ship anything, you orient.
 
-- [ ] `git pull` across every active repo (yours + clients')
+- [ ] `git pull` across every active repo you're working in
 - [ ] Quick database scan — any new messages, inquiries, orders?
 - [ ] KPI gauge: today vs. yesterday vs. rolling 7-day average
 - [ ] Set today's priorities in Linear and GitHub
@@ -29,7 +29,7 @@ Lock in. This is when the captain ships.
 Decide using a triangle:
 
 1. **Bug reports / fires** — does anything need stopping today?
-2. **Team priorities** — what's blocking Tati / Ellen / a client?
+2. **Team / customer priorities** — what's blocking a teammate or a customer?
 3. **Your priorities** — the directional bets only you can make
 
 If two of three are quiet, focus on the third.
