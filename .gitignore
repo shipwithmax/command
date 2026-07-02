@@ -34,12 +34,11 @@ Thumbs.db
 # (you'll fork and add your own — but don't push these to your fork's main branch
 #  unless you're explicit about what's safe)
 calendar/
-raw/screenshots/
-raw/uploads/
-raw/data/
-raw/articles/
-raw/meeting-logs/
-clients/
+inbox/screenshots/
+inbox/uploads/
+inbox/data/
+inbox/articles/
+inbox/meeting-logs/
 missions/
 archive/
 

@@ -6,10 +6,6 @@
 
 *Add one line per venture you own. Format: `name.md — one-line description`*
 
-## wiki/clients/
-
-*Add one line per paid client. Format: `name.md — one-line description`*
-
 ## wiki/concepts/
 
 *Cross-cutting topics, syntheses, research notes. Format: `name.md — one-line description`*

@@ -216,7 +216,7 @@ Run command-init again any time you want to add another venture.
 - Doesn't create code repos. The captain links existing GitHub repos in `_links.md` after creation.
 - Doesn't deploy anything. This is a knowledge-base bootstrap, not an infrastructure spin-up.
 - Doesn't fill in real content. Every value is what the captain gives + sensible TKTK placeholders for what they skip.
-- Doesn't run for clients. There's a sibling skill called `client-init` (TKTK — to be added in v0.4) for paid engagements with different shape (`access-map.md`, billing context, etc.).
+- Doesn't validate the idea for you. There's a sibling skill called `validate-idea` (TKTK — to be added in v0.4) that runs competitor research and drafts a product spec + waitlist-test plan.
 
 ## Re-running this skill
 

@@ -14,8 +14,8 @@ Each skill is a self-contained directory with a `SKILL.md` manifest. The captain
 
 | Skill | Ships in | What it'll do |
 |---|---|---|
-| `client-init` | v0.4 | Same as `command-init` but for paid client engagements — adds `access-map.md`, billing context, scope notes |
-| `ingest-meeting` | v0.4 | Drop a meeting transcript or voice note in `raw/meeting-logs/`, get a structured wiki entry + log line + cross-reference auto-built |
+| `process-inbox` | v0.4 | Sweep `inbox/`, turn new transcripts / notes / clips into structured wiki entries + log lines + cross-references, then tidy what's been processed |
+| `validate-idea` | v0.4 | Take a rough idea, run competitor + market research, draft a product spec and a waitlist-test plan into `ventures/<slug>/` |
 | `daily-brief` | v0.5 | Generate a morning brief from yesterday's `log.md`, active ventures, and pending missions. Reads, summarizes, asks the captain 5–10 questions. |
 | `lint-folder` | v0.5 | Structural health check — finds files in wrong places, orphan wiki pages, missions missing PM links. Reports with suggested fixes. |
 | `deploy-worker` | v0.6 | Spin up a Cloudflare Worker from a `ventures/<name>/worker/` directory. Runs wrangler deploy + logs the URL. |

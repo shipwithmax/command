@@ -28,7 +28,7 @@ tools/
 
 - Project code (that belongs in the venture's GitHub repo)
 - Anything ephemeral
-- Anything specific to a single client
+- Anything specific to a single venture (keep it in that venture's folder)
 
 ## Quick start — invoke the first shipped skill
 

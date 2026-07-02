@@ -7,7 +7,7 @@ Reusable patterns. Drop a markdown file here for anything you find yourself writ
 - `meeting-note.md` — your standard format for meeting captures
 - `decision.md` — format for entries in `<area>/decisions.md`
 - `venture-readme.md` — boilerplate for new venture folders
-- `client-readme.md` — boilerplate for new client folders
+- `idea.md` — boilerplate for a new idea you're validating
 - `wiki-page.md` — boilerplate for new wiki entries
 
 ## Example: meeting-note.md

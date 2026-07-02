@@ -2,24 +2,28 @@
 
 Compiled knowledge. AI maintains, you review.
 
-This is where information from `raw/` gets distilled into one-page-per-entity reference docs. The wiki is your business's Wikipedia — every venture, client, person, and concept gets one page. Cross-linked with `[[wikilinks]]`.
+This is where information from `inbox/` gets distilled into one-page-per-entity reference docs. The wiki is your business's Wikipedia — every venture, person, and concept gets one page. Cross-linked with `[[wikilinks]]`.
 
 ## Subfolders
 
 - `ventures/` — One page per venture you own
-- `clients/` — One page per paid client
 - `people/` — One page per person in your orbit
 - `concepts/` — Cross-cutting topics, syntheses, research notes
 
 ## Page template
 
-Every page starts with frontmatter:
+Every page starts with frontmatter. These fields line up with Google's
+[Open Knowledge Format](../docs/open-knowledge-format.md), so your wiki is a
+valid OKF bundle out of the box:
 
 ```markdown
 ---
-type: venture | client | person | concept
+type: venture | person | concept
+title: Page title
+description: One-line summary of what this page is.
+tags: [tag-a, tag-b]
 status: active | paused | archived
-last_updated: 2026-05-01
+timestamp: 2026-05-01T00:00:00Z
 ---
 
 # Page title
@@ -37,8 +41,8 @@ Longer prose. What happened, what's true, what's relevant.
 - [[another-page]]
 
 ## Source material
-- `raw/articles/some-pdf.pdf`
-- `raw/meeting-logs/2026-04-15-call-with-x.md`
+- `inbox/articles/some-pdf.pdf`
+- `inbox/meeting-logs/2026-04-15-call-with-x.md`
 ```
 
 ## When AI updates a wiki page
