@@ -179,7 +179,7 @@ write-up in [`docs/frameworks.md`](./docs/frameworks.md).
 
 ## License
 
-MIT. Use it. Fork it. Make it yours. Tell us what you change.
+MIT ([full text](./LICENSE)). Use it. Fork it. Make it yours. Tell us what you change.
 
 The full operating model — **Command** (this folder) + **Compute** (your AI +
 infrastructure) + **Cadence** (the daily practice that compounds) — is taught at
