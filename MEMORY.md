@@ -23,12 +23,29 @@ This file is for *learnings* — things Claude noticed about how you actually wo
 
 ---
 
+## How Claude keeps this file useful
+
+- **One line per memory, dated.** Absolute dates (`2026-11-09`), never "last week".
+- **Corrections beat observations.** When the captain corrects something, record it
+  under Corrections, and drop or fix the old entry.
+- **Check before acting.** A memory can go stale. If it matters, confirm it still
+  holds before relying on it.
+- **Don't duplicate.** If it's already in `CLAUDE.md`, a wiki page, or the code, link
+  to it instead of copying it.
+- **Stay under 200 lines.** Only the top of the file loads every session. When it
+  grows, merge similar entries or move detail into a wiki page and keep a one-line
+  pointer here.
+- **Nothing sensitive.** No secrets, no health or money details, no personal remarks
+  about other people.
+
+---
+
 ## Observed patterns
 
 _(Claude appends new observations below as it learns. Each entry has a date and a brief note.)_
 
 <!-- Example format:
-- **2026-05-04** — Captain prefers `, ` over em-dash in prose. Avoid m-dashes in drafts.
+- **2026-05-04** — Captain prefers commas over em dashes in prose. Avoid em dashes in drafts.
 - **2026-05-05** — When asked for "research," captain wants source URLs in a final References section, not inline.
 -->
 
@@ -40,7 +57,7 @@ _(If Claude got something wrong here, you can edit. Add a `(corrected)` tag so w
 
 ---
 
-## Why MaxShip's Command Folder ships with this file
+## Why the kit ships with this file
 
 Without `MEMORY.md`, Claude's auto-memory system has nowhere to surface its learnings inside your folder, so the observations live in chat memory only. With `MEMORY.md` here, Claude treats it as part of the project context, which means:
 

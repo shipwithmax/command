@@ -25,6 +25,8 @@ The full essay is at [max-ship.com/log/cadence/master-cadence](https://max-ship.
 
 When you talk to Claude (or any AI tool with filesystem access) about today's work, point it at `cadence/daily.md`. When it's quarterly review time, point it at `cadence/quarterly.md` plus the previous `cadence/yearly.md`. The folder is the captain's brief. The AI reads what you've written and stays in your context.
 
+The daily rhythm has skills to run it for you: `daily-brief` in the morning, `focus` while you work, `shutdown` at night. The shutdown writes `atlas/handoff.md`, and the next morning's brief starts there. See [`tools/skills/`](../tools/skills/).
+
 Most operators paste the same context into ChatGPT every time. Captains running this folder don't.
 
 ## How the cadences stack

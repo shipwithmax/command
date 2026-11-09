@@ -57,6 +57,7 @@ git clone https://github.com/shipwithmax/command.git ~/command
 
 # 3. Open the same folder in your AI
 #    Claude Code: open the app → "Open project" → choose ~/command
+#    Codex, Cursor and others: open the folder (they read AGENTS.md, which points to CLAUDE.md)
 #    ChatGPT: make a Project, upload CLAUDE.md + your key files
 
 # 4. Bring it to life
@@ -79,22 +80,60 @@ and populates your first project in about two minutes.
 | `inbox/` | **Everything lands here first.** Captures, transcripts, PDFs, screenshots — sorted later. |
 | `wiki/` | **Your business's Wikipedia.** One clean page per venture, person, or concept. Your AI maintains it; you review. |
 | `ventures/` | **Things you own.** Notes, decisions, and links for each project or business. |
-| `missions/` | **Active to-dos**, each linked to your task tool (Linear / Todoist / Notion). |
-| `strategy/` | **The big picture** — objectives, quarterly rocks, annual themes. |
-| `cadence/` | **Your rhythms** — daily / weekly / monthly / quarterly / yearly templates that keep the system alive. |
-| `atlas/` | **Maps** — dashboards and index pages that point to everything else. |
-| `templates/` | **Reusable patterns** — meeting notes, decision entries, new-venture boilerplate. |
-| `tools/` | **Reusable scripts + AI skills** (like `command-init`). |
-| `compute/` | **What's running for you** — your stack and automations, in writing. |
+| `missions/` | **Active work.** One file per piece of work. Links to your task tool (Linear / Todoist / Notion) if you use one, or is the record if you don't. |
+| `strategy/` | **The big picture**: objectives, quarterly rocks, annual themes. |
+| `cadence/` | **Your rhythms**: daily / weekly / monthly / quarterly / yearly templates that keep the system alive. |
+| `atlas/` | **Maps**: dashboards and index pages that point to everything else, plus tonight's handoff to tomorrow. |
+| `templates/` | **Reusable patterns**: missions, meeting notes, decisions, wiki pages, new-venture boilerplate. |
+| `tools/` | **Reusable scripts + AI skills** (like `command-init`), plus optional guardrail hooks. |
+| `compute/` | **What's running for you**: your stack and automations, in writing. |
+| `docs/` | **How the kit works.** The frameworks, secrets, agent autonomy, tracking, advanced setup. |
 | `archive/` | **Done / parked.** Where finished work goes to rest. |
 
-Four files at the root: **`CLAUDE.md`** (instructions your AI reads first — you
-write this), **`MEMORY.md`** (what your AI learns about how you work),
-**`index.md`** (a catalog of your wiki), **`log.md`** (a one-line-per-day
-activity log).
+Five files at the root: **`CLAUDE.md`** (instructions your AI reads first. You
+write this), **`AGENTS.md`** (a pointer to `CLAUDE.md` for tools that look for
+that name), **`MEMORY.md`** (what your AI learns about how you work),
+**`index.md`** (a catalog of your wiki), **`log.md`** (one line per thing that
+happened, append-only).
 
 The structure is opinionated on purpose. Don't fight it for a month, then change
 what doesn't fit you.
+
+---
+
+## A day with `command` (optional, but it's where it clicks)
+
+Three skills turn the folder into a daily loop. Just say the words:
+
+- **Morning:** *"Brief me."* The `daily-brief` skill reads last night's handoff
+  and your active work, then helps you pick the first block.
+- **While you work:** *"Focus on the menu page."* The `focus` skill ties the
+  session to one task and keeps a one-line footer, so neither you nor the AI
+  drifts.
+- **Evening:** *"Shutdown."* The `shutdown` skill takes your brain dump, gets a
+  call on every open item (do, re-date, delegate, drop), and writes
+  `atlas/handoff.md` so tomorrow starts where today stopped.
+
+Your AI forgets between sessions. The handoff and the log don't.
+
+---
+
+## Your AI, with guardrails
+
+The more your AI can do, the more it matters what it does *on its own*.
+`CLAUDE.md` sorts actions into three tiers:
+
+- **Green, just do it:** read, write notes, research, draft, update the log.
+- **Yellow, ask once:** push a branch, install things, change automations.
+- **Red, always ask:** send or publish anything, deploy, merge, delete, spend,
+  touch secrets.
+
+Drafts are always fine. Sending is always yours. Code goes through a pull
+request that you merge: *agents propose, humans merge.* Want the rules
+enforced, not just written down? Optional hooks in
+[`tools/hooks/`](./tools/hooks/) block risky commands before they run. They're
+off until you turn them on. Details in
+[`docs/agent-autonomy.md`](./docs/agent-autonomy.md).
 
 ---
 
@@ -140,11 +179,13 @@ The beginner layer above is all you need to get real value. When you're ready fo
 more, the folder becomes an operating layer you can *deploy from* and *connect to
 other tools*:
 
-- [`docs/advanced.md`](./docs/advanced.md) — the four operations + Build / Deploy / Integrate, MCP/API/SDK patterns, missions, Cloudflare.
-- [`docs/secrets.md`](./docs/secrets.md) — how to keep credentials safe (the one rule with no exceptions).
-- [`docs/frameworks.md`](./docs/frameworks.md) — what this is built on: PARA, August Bradley's PPV, Karpathy, OKF.
-- [`docs/open-knowledge-format.md`](./docs/open-knowledge-format.md) — how `command` maps to Google's OKF.
-- [`docs/html-in-the-vault.md`](./docs/html-in-the-vault.md) — keeping interactive HTML next to your markdown.
+- [`docs/advanced.md`](./docs/advanced.md): the four operations + Build / Deploy / Integrate, MCP/API/SDK patterns, missions, Cloudflare.
+- [`docs/agent-autonomy.md`](./docs/agent-autonomy.md): what your AI may do alone, production gates, optional hooks.
+- [`docs/tracking-work.md`](./docs/tracking-work.md): one source of truth, repo vs folder work, shared vs private, handoffs, meetings.
+- [`docs/secrets.md`](./docs/secrets.md): how to keep credentials safe (the one rule with no exceptions).
+- [`docs/frameworks.md`](./docs/frameworks.md): what this is built on: PARA, August Bradley's PPV, Karpathy, OKF.
+- [`docs/open-knowledge-format.md`](./docs/open-knowledge-format.md): how `command` maps to Google's OKF.
+- [`docs/html-in-the-vault.md`](./docs/html-in-the-vault.md): keeping interactive HTML next to your markdown.
 
 ---
 
@@ -152,8 +193,13 @@ other tools*:
 
 **No credentials. Ever.** API keys, passwords, `.env` files — none of it lives in
 this folder. Secrets live *outside*, in a locked folder of their own. This matters
-more than it sounds (git history is forever; AI agents read your files). The full
-why-and-how is in [`docs/secrets.md`](./docs/secrets.md).
+more than it sounds (git history is forever; AI agents read your files). And
+`.gitignore` only stops a file being committed. It doesn't stop an agent reading
+it. The full why-and-how is in [`docs/secrets.md`](./docs/secrets.md).
+
+**No crown jewels.** Unfiled inventions, trade-secret recipes, NDA material: keep
+them in a separate folder your AI can't read. The folder is for context, not for
+your moat.
 
 **No project code.** Your apps live in their own GitHub repos, linked from
 `ventures/<name>/_links.md`. This folder holds *context and decisions*, not source.
@@ -177,6 +223,52 @@ write-up in [`docs/frameworks.md`](./docs/frameworks.md).
 
 ---
 
+## Changelog
+
+### v0.5 (November 2026)
+
+The kit catches up with what a live command center learned in the months
+since v0.4.
+
+- **Autonomy tiers** in `CLAUDE.md`: green (do), yellow (ask once), red
+  (always ask). Sending and publishing are always the captain's call.
+- **More non-negotiable rules:** main is production, diff before commit, no
+  exfiltration, drafts only outside the folder, ask once when unclear.
+- **A "Current focus" block** at the top of `CLAUDE.md`, so back-burner work
+  doesn't crowd out the priority.
+- **Tracking work:** one source of truth per kind of work, repo work vs folder
+  work, keeping shared and private work apart, linking the exact file, and
+  meetings with consent. New doc: `docs/tracking-work.md`.
+- **Five new skills:** `process-inbox`, `lint-folder`, `daily-brief`, `focus`
+  and `shutdown` (with a nightly `atlas/handoff.md`). `command-init` updated.
+- **Optional hooks** in `tools/hooks/`: block risky shell commands, keep the
+  folder's shape, and log what was blocked. Off by default.
+- **Secrets, three layers deep:** `.gitignore` is a commit net, not a read
+  block; agent read blocks; platform secrets for deployed code; an IP
+  carve-out. New: `tools/integrations/cloudflare-secrets.md`.
+- **New doc:** `docs/agent-autonomy.md` (tiers, production gates, enforcement).
+- **`AGENTS.md`** at the root, a pointer to `CLAUDE.md` for Codex, Cursor and
+  other tools. One source of truth, no drift.
+- **Real templates:** mission, venture, decision, meeting note, wiki page,
+  person, daily note, handoff.
+- **`missions/` and `archive/` now ship** with a README. They were described
+  before but not included.
+- **Fixes:** the root-file list now includes `README.md` and `LICENSE`; wiki
+  frontmatter uses `timestamp` everywhere; broken links in `compute/` fixed;
+  cadence templates made generic.
+
+### Earlier
+
+- **v0.4** (July 2026): two-tier rewrite, `inbox/` replaces `raw/`, OKF
+  alignment. Also new since v0.3: `MEMORY.md` and the three-layer memory
+  model; the `cadence/`, `compute/` and `strategy/` folders.
+- **v0.3** (May 2026): the first skill, `command-init`; deeper integrations;
+  the secrets rationale.
+- **v0.2:** ethos-first README, expanded `CLAUDE.md` schema.
+- **v0.1:** the first public stencil.
+
+---
+
 ## License
 
 MIT ([full text](./LICENSE)). Use it. Fork it. Make it yours. Tell us what you change.
@@ -188,4 +280,4 @@ infrastructure) + **Cadence** (the daily practice that compounds) — is taught 
 
 — Max
 
-*v0.4 · public release · MIT*
+*v0.5 · public release · MIT*

@@ -1,16 +1,17 @@
 # Daily Cadence — Captain's Template
 
 > Drop this into `~/command/cadence/daily/template.md` in your Command Kit.
-> The day below is roughly how Max runs MaxShip — adapt to your rhythm.
+> It's a starting rhythm for a solo operator or a small team. Adapt it.
 
 ## ⚓ Morning scan (first 30 minutes)
 
 Before you ship anything, you orient.
 
+- [ ] *"Brief me."* The `daily-brief` skill reads last night's `atlas/handoff.md`, recent `log.md` lines and your active missions
 - [ ] `git pull` across every active repo you're working in
-- [ ] Quick database scan — any new messages, inquiries, orders?
-- [ ] KPI gauge: today vs. yesterday vs. rolling 7-day average
-- [ ] Set today's priorities in Linear and GitHub
+- [ ] Quick inbox scan: any new messages, inquiries, orders?
+- [ ] One number that matters: today vs. yesterday vs. the 7-day average
+- [ ] Pick the first block, and start `focus` on it
 
 The point isn't to absorb every detail. The point is to know the shape of the day before you start.
 
@@ -18,19 +19,19 @@ The point isn't to absorb every detail. The point is to know the shape of the da
 
 Lock in. This is when the captain ships.
 
-- [ ] At least 1–3 PRs (push small + often beats waiting for a big one)
-- [ ] Look for code to **delete** as readily as code to add
-- [ ] Improve a tool/pattern the team uses
-- [ ] Add or upgrade an automated cadence somewhere (nightly research, weekly review, etc.)
-- [ ] Check the daily/weekly loops are still running clean
+- [ ] Ship something real: a pull request, a page, a proposal, a customer call
+- [ ] Batch by *type* of work (hands-on, writing, comms, decisions). Switching types costs more than switching projects
+- [ ] Look for things to **delete** as readily as things to add
+- [ ] Improve one tool or pattern you use
+- [ ] Check the daily and weekly loops are still running clean
 
 ## 🎯 What to ship next
 
 Decide using a triangle:
 
-1. **Bug reports / fires** — does anything need stopping today?
-2. **Team / customer priorities** — what's blocking a teammate or a customer?
-3. **Your priorities** — the directional bets only you can make
+1. **Fires**: does anything need stopping today?
+2. **Team and customer priorities**: what's blocking a teammate or a customer?
+3. **Your priorities**: the directional bets only you can make
 
 If two of three are quiet, focus on the third.
 
@@ -38,14 +39,17 @@ If two of three are quiet, focus on the third.
 
 The most important 15 minutes of the day.
 
-- [ ] Triple-check Claude has logged everything on a Linear ticket — with rich detail, not just headlines
-- [ ] Every meaningful action gets a ticket number → that's the course-of-record
-- [ ] Read tomorrow's plan back. Edit it before bed, not after coffee
+- [ ] *"Shutdown."* The `shutdown` skill takes your brain dump and gets a call on every open item
+- [ ] Every meaningful action is logged with detail on its mission or ticket, not just a headline
+- [ ] Every overdue item gets a call: do, re-date, delegate or drop. Nothing carries over silently
+- [ ] Read tomorrow's handoff (`atlas/handoff.md`). Edit it before bed, not after coffee
 - [ ] Close laptop. Walk away.
 
 ## Why this matters
 
-Linear becomes the **journal of the work done**. Months later, you can ask "when did we add that? why?" — and there's a ticket with the answer. The discipline at end-of-day is what makes the company memory possible at all.
+Your missions and tracker become the **journal of the work done**. Months
+later, you can ask "when did we add that, and why?" and there's an answer. The
+discipline at end of day is what makes company memory possible at all.
 
 ---
 

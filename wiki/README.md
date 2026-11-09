@@ -49,6 +49,17 @@ Longer prose. What happened, what's true, what's relevant.
 
 Always:
 1. Preserve cross-references — never break wikilinks
-2. Update `last_updated` in frontmatter
+2. Update `timestamp` in frontmatter
 3. Append a log entry to `/log.md` describing what changed
 4. Update `/index.md` if a new page was added
+
+Optional: add `created-by: captain` or `created-by: agent`, so you can see at a
+glance who started a page. A blank page to start from is in
+[`templates/wiki-page.md`](../templates/wiki-page.md).
+
+## Keep people pages factual
+
+`wiki/people/` is about working relationships: role, what they own, what you
+owe each other. Keep personal remarks and private details out, and keep
+contact details in your contacts app. If you ever share or publish part of this
+folder, leave `wiki/people/` out.

@@ -2,7 +2,7 @@
 
 > Append-only activity log. Format: `## [YYYY-MM-DD] operation | description`
 >
-> Operations: `ingest` · `query` · `compile` · `lint` · `decision` · `ship`
+> Operations: `ingest` · `query` · `compile` · `lint` · `decision` · `ship` · `build` · `deploy` · `integrate` · `brief` · `shutdown`
 
 ## [YYYY-MM-DD] decision | Initial command center setup
 

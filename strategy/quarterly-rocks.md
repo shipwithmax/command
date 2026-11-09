@@ -22,7 +22,7 @@
 
 **What I need to NOT do:** [the trap that would kill this rock]
 
-**Linked Linear epic:** [URL]
+**Linked mission or tracker epic:** [link]
 
 ---
 
@@ -40,7 +40,7 @@
 
 **What I need to NOT do:**
 
-**Linked Linear epic:**
+**Linked mission or tracker epic:**
 
 ---
 
@@ -58,7 +58,7 @@
 
 **What I need to NOT do:**
 
-**Linked Linear epic:**
+**Linked mission or tracker epic:**
 
 ---
 
