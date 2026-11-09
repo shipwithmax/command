@@ -6,39 +6,41 @@
 ## What lives here
 
 - **[stacks-overview.md](./stacks-overview.md)** — the technology bundles you've assembled. One section per Stack.
-- (Add more files as you spin up specific Stack docs — `cloudflare-stack.md`, `email-stack.md`, etc.)
+- (Add more files as you spin up specific Stack docs: `edge-stack.md`, `email-stack.md`, and so on.)
 
 ## What is Compute?
 
-Compute is the engine. The crew. Where [Command](../command/) writes the brief, Compute executes it.
+Compute is the engine. The crew. Where [Command](../CLAUDE.md) writes the brief, Compute executes it.
 
-Compute encompasses every machine doing work for you:
+Compute covers every machine doing work for you:
 
 - Claude, GPT, and other LLMs
-- Claude Code and other AI coding agents
-- Cloudflare Workers running scheduled jobs
-- MCPs giving the AI access to your tools (Linear, GitHub, Notion, etc.)
+- Claude Code, Codex and other AI coding agents
+- Workers and scheduled jobs running in the cloud
+- MCPs giving the AI access to your tools (your tracker, GitHub, your docs)
 - Hosted services, deployed scripts, integrations
 
 You don't run all of it manually. Most of it runs while you sleep. The captain's job in Compute is to **organize what's running, name the bundles (Stacks), and decide what gets retired or upgraded.**
 
 ## Stacks — the legible unit of Compute
 
-A Stack is a bundle of tools configured for a specific class of problem. The Cloudflare Edge Stack (Workers + D1 + R2 + Pages + Access). The Content Production Stack (Claude + HeyGen + Remotion + Zernio). The MCP Stack (Linear + GitHub + PostHog + Notion).
+A Stack is a bundle of tools configured for a specific class of problem. An Edge Stack (Workers + a database + storage + auth). A Content Stack (an LLM + a video tool + a scheduler). An MCP Stack (your tracker + GitHub + analytics + docs).
 
 Stacks are how Compute becomes legible to you. Without them, "Compute" is a sprawl. With them, it's a list of cookbooks.
 
-The site at [max-ship.com/log/stacks](https://max-ship.com/log/stacks) maintains a living catalog of the Stacks we've documented. Use them as reference; build your own; populate `stacks-overview.md` with what you actually run.
+The site at [max-ship.com/log/stacks](https://max-ship.com/log/stacks) maintains a living catalog of documented Stacks. Use them as reference; build your own; populate `stacks-overview.md` with what you actually run.
 
 ## How AI uses this folder
 
-When you ask Claude to add a new automated job, point it at `compute/stacks-overview.md` first. It'll know your existing infrastructure, what tools you already pay for, what conventions to match. Output gets dramatically better when the AI doesn't have to guess your stack from context-free prompts.
+When you ask your AI to add a new automated job, point it at `compute/stacks-overview.md` first. It'll know your existing infrastructure, what tools you already pay for, and what conventions to match. Output gets much better when the AI doesn't have to guess your stack.
+
+Whenever your AI builds something that runs on its own, it adds it here (see "When you build a tool, write it down" in [`tools/README.md`](../tools/README.md)).
 
 ## What goes here vs. elsewhere
 
-- **Compute (here):** active running infrastructure, deployed services, agents, scheduled jobs
-- **Tools you considered but didn't pick:** notes in `command/decisions/` or similar
-- **Marketing of tools (affiliate notes, etc.):** [public ToolCard registry](https://github.com/shipwithmax/maxship-site/blob/main/src/data/tools.ts), not here
+- **Compute (here):** active running infrastructure, deployed services, agents, scheduled jobs, and the guardrails around them
+- **Tools you considered but didn't pick:** a decision entry in `ventures/<name>/decisions.md`
+- **Secrets:** never here. See [`docs/secrets.md`](../docs/secrets.md)
 
 Keep this folder honest. Only what's actually running.
 

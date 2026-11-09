@@ -14,6 +14,20 @@ ventures/<name>/
 ```
 
 `README.md` is the only mandatory file. Add others as content accumulates.
+Start it from [`templates/venture-readme.md`](../templates/venture-readme.md), or
+let the `command-init` skill set the whole folder up.
+
+## Three lines every venture README should have
+
+```yaml
+tracking: missions/        # or Linear, Todoist, Notion: where its tasks live
+visibility: private        # or shared: may its work go in a team's shared tools?
+human_in_the_loop: false   # true = the agent never sends, posts or publishes for it
+```
+
+Your AI reads these to route work on its own: where to file a task, what may
+never appear in a shared workspace, and where to be extra careful. See
+[`docs/tracking-work.md`](../docs/tracking-work.md).
 
 ## Code lives elsewhere
 

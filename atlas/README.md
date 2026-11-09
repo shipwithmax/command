@@ -8,6 +8,7 @@ Use this folder for:
 - Cross-cutting dashboards — *"All ventures by status"*, *"Every idea I'm still validating"*
 - MOCs (Maps of Content) — Obsidian-style index pages that link out to wiki entries
 - Visualizations of how your business connects to itself
+- **`handoff.md`**: tonight's note to tomorrow. The `shutdown` skill overwrites it each evening, and the `daily-brief` skill reads it first each morning. One screen: first block, where things stand, who you're waiting on, what not to forget.
 
 ## Why a separate folder
 

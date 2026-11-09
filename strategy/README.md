@@ -29,11 +29,11 @@ When you ask Claude "should I take on X new project?" — point it at `strategy/
 
 The compounding: the AI gets better at strategic conversations the more this folder gets filled in. Empty strategy folder = AI guessing your priorities. Filled in = AI extending your priorities.
 
-## What MaxShip does differently
+## What this kit does differently
 
 Most methodologies teach OKRs. They teach you to *set* direction. They don't teach the **cadence** that lets you check whether direction is still right.
 
-The MaxShip pattern: strategy lives in this folder, the **Strategic cadence** lives in [`cadence/quarterly.md`](../cadence/quarterly.md) + [`cadence/yearly.md`](../cadence/yearly.md). One sets the direction; the other validates whether reality is moving toward it. Both are required.
+The pattern here: strategy lives in this folder, the **Strategic cadence** lives in [`cadence/quarterly.md`](../cadence/quarterly.md) + [`cadence/yearly.md`](../cadence/yearly.md). One sets the direction; the other validates whether reality is moving toward it. Both are required.
 
 Read the full Strategy Mental System at [max-ship.com/log/strategic-planning](https://max-ship.com/log/strategic-planning).
 

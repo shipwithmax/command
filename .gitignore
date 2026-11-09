@@ -1,13 +1,19 @@
 # Secrets — NEVER commit
+# (This stops commits only. It does NOT stop an AI agent from reading a file.
+#  Secrets live outside this folder. See docs/secrets.md.)
 .env
 .env.*
 !.env.example
+.dev.vars
+.dev.vars.*
 *.pem
 *.key
 *.p12
 *.pfx
 secrets/
 *-secrets/
+# Broad on purpose: a note named like "design-tokens.md" is ignored too.
+# Rename it, or add a !negation line for it.
 *credentials*
 *token*
 
@@ -27,6 +33,7 @@ Thumbs.db
 # AI tool local state
 .claude/cache/
 .claude/sessions/
+.claude/settings.local.json
 .smart-env/
 .wrangler/
 
@@ -39,16 +46,19 @@ inbox/uploads/
 inbox/data/
 inbox/articles/
 inbox/meeting-logs/
-missions/
-archive/
+missions/*
+!missions/README.md
+archive/*
+!archive/README.md
+atlas/handoff.md
 
 # Hold on — read this:
-# The directories above are gitignored in this PUBLIC TEMPLATE because they
+# The paths above are gitignored in this PUBLIC TEMPLATE because they
 # typically hold private content. When you clone this repo into your own
 # private command center, you'll likely want to UN-ignore some of them
-# (calendar/, missions/, archive/) since your private repo can hold them
-# safely. The public template ships with empty directories you populate.
+# (missions/, archive/, atlas/handoff.md) since your private repo can hold
+# them safely. The public template ships with only their README files.
 #
 # Rule of thumb: if your repo is PRIVATE, ignore only secrets + OS cruft.
 # If your repo is PUBLIC, ignore everything that contains real-world data
-# about real-world businesses or people.
+# about real-world businesses or people (and wiki/people/ too).

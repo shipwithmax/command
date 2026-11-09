@@ -8,11 +8,13 @@ Monthly is where you zoom out. Weekly cadence handles the work; monthly handles 
 
 ## 📋 Monthly checklist
 
-- [ ] **Content retrospective** — what landed across channels this month? What flopped?
-- [ ] **Security review** — secrets rotation if needed, dependency audit, access list review
-- [ ] **Financial scan** — burn rate, MRR/revenue, vendor + cost line check
-- [ ] **System improvements** — what should be automated that still isn't?
-- [ ] **One-on-ones** — deeper team conversations than weekly allows
+- [ ] **Content retrospective**: what landed across channels this month? What flopped?
+- [ ] **Security review**: secrets rotation if needed, dependency audit, access list review
+- [ ] **Agent review**: skim what your AI was blocked from or asked about (the guard log, if you use `tools/hooks/`). Move items between the autonomy tiers in `CLAUDE.md` if the rules feel too tight or too loose
+- [ ] **Current focus**: is the "Current focus" block at the top of `CLAUDE.md` still true?
+- [ ] **Financial scan**: burn rate, MRR/revenue, vendor + cost line check
+- [ ] **System improvements**: what should be automated that still isn't?
+- [ ] **One-on-ones**: deeper team conversations than weekly allows
 
 ## 🧭 Strategic check (15 min, written)
 

@@ -6,9 +6,9 @@
 
 Yearly is the slowest cadence and the one most operators skip. **Don't.**
 
-## 🎙️ The 10-hour interview format (Max's pattern)
+## 🎙️ The 10-hour interview format
 
-Each yearly review at MaxShip is a 10+ hour conversation — voice notes + recorded calls answering hundreds of questions across every venture. The output is a finalized report formatted for AI consumption that becomes the input to next year's strategy.
+Run the yearly review as a long conversation: 10+ hours of voice notes and recorded calls, spread over a week or two, answering hundreds of questions across every venture. Your AI can play interviewer, one question at a time. The output is a finalized report formatted for AI that becomes the input to next year's strategy.
 
 The questions that produce the report:
 

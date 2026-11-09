@@ -1,73 +1,64 @@
 ---
 name: command-init
-description: Bootstrap a freshly-cloned `command` folder with the captain's first venture. Asks 4 questions, populates ventures/, wiki/, log.md, and decisions.md so the folder feels alive within 5 minutes of cloning.
-when_to_invoke: First time the captain opens the folder, or any time they want to add a new venture to an existing folder. The captain will say something like "run the command-init skill" or "set up my first venture" or "add a new venture to my command folder."
+description: Set up a venture in the command folder. Asks a few short questions, then creates ventures/<slug>/, a wiki page, an index line and a log line so the folder feels alive within minutes. Use when the captain says "run command-init", "set up my first venture", or "add a new venture".
+when_to_invoke: First time the captain opens the folder, or any time they add a venture.
 inputs:
-  - venture_name: string — the human-readable name (e.g. "Recovery Stack")
-  - venture_slug: string — the kebab-case slug (e.g. "recovery-stack"). Auto-derive from venture_name if not provided.
-  - one_liner: string — one sentence under 25 words describing what this venture is.
-  - target_audience: string — who this is for (one paragraph).
-  - first_decision: string (optional) — one decision the captain has already made about this venture, with reasoning.
+  - venture_name: the human-readable name (e.g. "Acme Coffee")
+  - venture_slug: kebab-case slug (e.g. "acme-coffee"). Derived from the name if not given.
+  - one_liner: one sentence, under 25 words, on what it is and who it helps
+  - target_audience: who it's for (one paragraph)
+  - tracking: where its tasks live (Linear, Todoist, Notion, or missions/ only). Optional.
+  - shared_or_private: whether the venture's work may go in a shared team tool, or stays private. Optional.
+  - first_decision: one decision already made, with the reason. Optional.
 outputs:
-  - ventures/<slug>/README.md — venture home
-  - ventures/<slug>/decisions.md — append-only decisions log, seeded with first_decision if provided
-  - ventures/<slug>/_links.md — placeholder for GitHub repos, deployed URLs, related docs
-  - wiki/ventures/<slug>.md — richer wiki entry cross-linking to the venture folder
-  - log.md — appended with a one-line entry recording the venture creation
-  - index.md — updated to include the new wiki entry
+  - ventures/<slug>/README.md
+  - ventures/<slug>/decisions.md
+  - ventures/<slug>/_links.md
+  - wiki/ventures/<slug>.md
+  - index.md (one line added)
+  - log.md (one line appended)
 ---
 
-# command-init — bootstrap your first venture
+# command-init: set up a venture
 
-A Claude Skill for `command`. The captain runs this once per venture, ideally on Day 1 of using the folder.
+Turns an empty `command` folder (or one with ventures already) into a working
+home for one more venture, in about two minutes.
 
-## What it does
+## Step 1: ask
 
-Turns a freshly-cloned (and otherwise empty) `command` folder into a populated, working knowledge base in 2 minutes. Specifically:
+Ask these one at a time, with the example. Keep it light.
 
-1. Asks the captain 4 short questions about the venture they want to add
-2. Creates `ventures/<slug>/` with three files (`README.md`, `decisions.md`, `_links.md`)
-3. Creates `wiki/ventures/<slug>.md` cross-linking to the venture folder
-4. Appends one line to `log.md` recording the creation
-5. Updates `index.md` to include the new wiki entry
-6. Reports back what was created with paths the captain can open
+1. **Name.** *"What's the venture called?"* Example: `Acme Coffee`
+2. **One-liner.** *"In one sentence, under 25 words: what is it, and what does it do for the person who finds it?"* Example: `Acme Coffee roasts small batches and delivers fresh beans to offices every Monday.`
+3. **Audience.** *"Who is it for? Describe the person, what they care about, what frustrates them."*
+4. **Tracking (optional).** *"Where will its tasks live: Linear, Todoist, Notion, or just missions/ in this folder?"*
+5. **Shared or private (optional).** *"Is this work you share with a team in a shared tool, or private to you?"* (If private, its tasks and details never go in a shared workspace. See `docs/tracking-work.md`.)
+6. **First decision (optional).** *"One decision you've already made about it, and why?"* Example: `Offices first, not homes, because one office order equals twenty home orders.`
 
-## How Claude executes this skill
+If the captain skips one, write `TKTK (captain to fill in)` and move on. A
+placeholder beats a blank.
 
-When the captain invokes the skill (any phrasing — "run command-init", "set up my first venture", "add a venture", etc.), Claude follows this script:
+## Step 2: make the slug
 
-### Step 1 · Gather inputs
+Lowercase, spaces and underscores to hyphens, strip anything that isn't a
+letter, number or hyphen, collapse repeated hyphens. `Acme Coffee` becomes
+`acme-coffee`. If the result looks odd, confirm it.
 
-Ask, in order, with examples:
+If `ventures/<slug>/` already exists, stop and ask. Default: don't overwrite.
 
-1. **Venture name** — *"What's the human-readable name of this venture?"* Example: `Recovery Stack`
-2. **One-liner** — *"In one sentence under 25 words, what is it and what does it do for someone who finds it?"* Example: `Recovery Stack is a guided recovery protocol library for athletes — picks the right protocol for tonight based on yesterday's training load.`
-3. **Target audience** — *"Who is this for? One paragraph — describe the person, what they care about, what they're frustrated by."*
-4. **First decision (optional)** — *"What's one decision you've already made about this venture, and why?"* Example: `Going to focus on HYROX athletes first because that's where I have direct insight and the community is small enough to get to know.`
+## Step 3: create the venture folder
 
-If the captain skips any answer, fill it with `TKTK — captain to fill in` and proceed. The folder is more useful with placeholders than with nothing.
-
-### Step 2 · Derive the slug
-
-From the venture name, derive a kebab-case slug:
-- Lowercase
-- Replace spaces and underscores with hyphens
-- Strip non-alphanumeric characters except hyphens
-- Trim consecutive hyphens
-
-Example: `Recovery Stack` → `recovery-stack`. Confirm with the captain if the slug looks weird.
-
-### Step 3 · Create the venture folder
-
-Create `ventures/<slug>/` with three files:
-
-**`ventures/<slug>/README.md`:**
+**`ventures/<slug>/README.md`** (start from `templates/venture-readme.md` if it exists):
 
 ```markdown
 ---
 type: venture
-slug: <slug>
+title: <Venture Name>
+description: <one_liner>
 status: active
+tracking: <tracking, or "missions/">
+visibility: <shared | private>
+human_in_the_loop: false
 created: <YYYY-MM-DD>
 ---
 
@@ -75,47 +66,38 @@ created: <YYYY-MM-DD>
 
 > <one_liner>
 
-## What this is
-
-<one_liner expanded into 2-3 sentences if helpful, otherwise just the one-liner>
+## Current state
+Just set up. Nothing shipped yet.
 
 ## Who it's for
-
 <target_audience>
 
 ## Where things live
-
-- **Wiki entry (richer context):** [wiki/ventures/<slug>.md](../../wiki/ventures/<slug>.md)
-- **Decisions log:** [decisions.md](./decisions.md)
-- **Repos + deployed URLs:** [_links.md](./_links.md)
+- Wiki page: [wiki/ventures/<slug>.md](../../wiki/ventures/<slug>.md)
+- Decisions: [decisions.md](./decisions.md)
+- Repos, live URLs, tracker project: [_links.md](./_links.md)
 
 ## Active missions
-
-*(missions/ files linked here as they get created)*
-
-## Notes
-
-*(captain adds free-form notes here over time)*
+*(missions/ files linked here as they're created)*
 ```
+
+`human_in_the_loop: true` means the agent never sends, posts or publishes
+anything for this venture, even with general approval. Set it for anything
+sensitive. Default is `false`.
 
 **`ventures/<slug>/decisions.md`:**
 
 ```markdown
 # <Venture Name> · Decisions
 
-> Append-only. New entries at the bottom. Each entry: what + why + when.
+> Append-only. Newest at the bottom. Each entry: what, why, when.
 
-## [<YYYY-MM-DD>] Created venture in command folder
-
-Bootstrapped via `command-init` skill. Initial framing:
+## [<YYYY-MM-DD>] Set up in the command folder
 - One-liner: <one_liner>
-- Target audience: <target_audience>
+- Audience: <target_audience>
 
-<if first_decision provided>
-## [<YYYY-MM-DD>] <first decision summary>
-
-<first_decision expanded>
-</if>
+## [<YYYY-MM-DD>] <first decision, short>      ← only if given
+<first_decision, with the reason>
 ```
 
 **`ventures/<slug>/_links.md`:**
@@ -123,109 +105,82 @@ Bootstrapped via `command-init` skill. Initial framing:
 ```markdown
 # <Venture Name> · Links
 
-External resources, repos, deployed URLs, related accounts.
+## Repos
+- *(add when you have one)*
 
-## GitHub
+## Live
+- *(add live URLs)*
 
-- *(add repo URL when you have one)*
-
-## Deployed
-
-- *(add live URLs when you have them)*
-
-## Related
-
-- *(add related Notion pages, Linear projects, etc.)*
+## Tracker
+- <tracking>: *(link to the project or board)*
 ```
 
-### Step 4 · Create the wiki entry
+## Step 4: create the wiki page
 
-**`wiki/ventures/<slug>.md`:**
+**`wiki/ventures/<slug>.md`** (OKF-compatible frontmatter, see `wiki/README.md`):
 
 ```markdown
 ---
-type: wiki-entry
-entity_type: venture
-slug: <slug>
-created: <YYYY-MM-DD>
+type: venture
+title: <Venture Name>
+description: <one_liner>
+tags: [venture]
+status: active
+timestamp: <YYYY-MM-DDT00:00:00Z>
+created-by: agent
 ---
 
 # <Venture Name>
 
-> <one_liner>
+<one_liner>
 
-## Audience
-
-<target_audience>
-
-## Status
-
-Active. Created <YYYY-MM-DD> via `command-init`.
-
-## Cross-references
-
-- **Venture folder:** [[ventures/<slug>]]
-- **Decisions:** [[ventures/<slug>/decisions]]
+## Key facts
+- Audience: <target_audience, one line>
+- Status: active since <YYYY-MM-DD>
 
 ## Open questions
-
-*(things the captain hasn't decided yet — append as they come up)*
-
 - TKTK
+
+## Cross-references
+- Venture folder: [ventures/<slug>](../../ventures/<slug>/README.md)
+- Decisions: [decisions](../../ventures/<slug>/decisions.md)
 ```
 
-### Step 5 · Append to `log.md`
+## Step 5: update index.md and log.md
 
-Append a single line to `log.md`:
-
-```markdown
-## [<YYYY-MM-DD>] decision | Created venture <slug> via command-init skill
-```
-
-### Step 6 · Update `index.md`
-
-Add the new wiki entry under `## wiki/ventures/`:
+Under `## wiki/ventures/` in `index.md` (create the heading if missing):
 
 ```markdown
 - <slug>.md — <one_liner>
 ```
 
-If the section doesn't exist yet, create it.
+Append to `log.md`:
 
-### Step 7 · Report back
-
-Print a confirmation to the captain like:
-
-```
-✓ Bootstrapped `<venture-name>`. Created:
-  • ventures/<slug>/README.md
-  • ventures/<slug>/decisions.md
-  • ventures/<slug>/_links.md
-  • wiki/ventures/<slug>.md
-  • log.md (one line appended)
-  • index.md (updated)
-
-Open ventures/<slug>/README.md to start adding notes. The wiki entry at
-wiki/ventures/<slug>.md is the place for richer context as you accumulate it.
-
-Run command-init again any time you want to add another venture.
+```markdown
+## [<YYYY-MM-DD>] decision | Set up venture <slug> via command-init
 ```
 
-## What this skill does NOT do
+## Step 6: report
 
-- Doesn't create code repos. The captain links existing GitHub repos in `_links.md` after creation.
-- Doesn't deploy anything. This is a knowledge-base bootstrap, not an infrastructure spin-up.
-- Doesn't fill in real content. Every value is what the captain gives + sensible TKTK placeholders for what they skip.
-- Doesn't validate the idea for you. There's a sibling skill called `validate-idea` (TKTK — to be added in v0.4) that runs competitor research and drafts a product spec + waitlist-test plan.
+```
+Set up <Venture Name>. Created:
+  - ventures/<slug>/README.md
+  - ventures/<slug>/decisions.md
+  - ventures/<slug>/_links.md
+  - wiki/ventures/<slug>.md
+  - index.md (one line)
+  - log.md (one line)
 
-## Re-running this skill
+Next: open ventures/<slug>/README.md and add notes. Drop anything about it
+into inbox/ and say "process my inbox" when you're ready.
+```
 
-Safe to run multiple times. Each invocation creates a new venture. The skill checks if `ventures/<slug>/` already exists and asks the captain to confirm before overwriting (default: don't overwrite).
+## What this skill does not do
 
-## Where this fits in the curriculum
-
-If you're a MaxShip student, this is the natural step after cloning the `command` folder on Day 1. The `command-init` skill turns the empty template into your project's real Command layer in one prompt.
+- Create code repos or deploy anything.
+- Make up content. Everything comes from the captain's answers or a TKTK.
+- Validate the idea. That's a separate skill on the roadmap (`validate-idea`).
 
 ---
 
-*Skill v0.1 · ships with `command` v0.3*
+*Skill v0.2 · ships with `command` v0.5*

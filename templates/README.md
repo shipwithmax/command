@@ -1,45 +1,36 @@
 # templates/
 
-Reusable patterns. Drop a markdown file here for anything you find yourself writing repeatedly.
+Reusable patterns. Start a new note from one of these instead of a blank page.
+They use Obsidian's core Templates syntax (`{{title}}`, `{{date}}`), so they
+work in Obsidian out of the box. Your AI uses them too.
 
-## Suggested templates to start with
+## Shipped templates
 
-- `meeting-note.md` — your standard format for meeting captures
-- `decision.md` — format for entries in `<area>/decisions.md`
-- `venture-readme.md` — boilerplate for new venture folders
-- `idea.md` — boilerplate for a new idea you're validating
-- `wiki-page.md` — boilerplate for new wiki entries
+| Template | Use it for |
+|---|---|
+| [`mission.md`](./mission.md) | A piece of work with an outcome: context, what done looks like, current status, next step, log. |
+| [`venture-readme.md`](./venture-readme.md) | The home page of a new `ventures/<name>/` folder. |
+| [`decision.md`](./decision.md) | One entry in a venture's append-only `decisions.md`. |
+| [`meeting-note.md`](./meeting-note.md) | A meeting: decisions, commitments, open questions, next step. |
+| [`wiki-page.md`](./wiki-page.md) | A new `wiki/` page, with OKF-compatible frontmatter. |
+| [`person.md`](./person.md) | A `wiki/people/` page. |
+| [`daily-note.md`](./daily-note.md) | A daily note, if you keep them. |
+| [`handoff.md`](./handoff.md) | The nightly handoff the `shutdown` skill writes to `atlas/handoff.md`. |
 
-## Example: meeting-note.md
+## Turn them on in Obsidian
 
-```markdown
----
-type: meeting
-date: YYYY-MM-DD
-participants:
-  - Person A
-  - Person B
----
+Settings → Core plugins → Templates → on. Set the template folder to
+`templates`. Then use the "Insert template" command in any new note.
 
-# Meeting: [topic]
+## Two fields worth keeping
 
-## Pre-call context
-What I knew going in.
-
-## What was discussed
-Bullet points or prose.
-
-## Decisions made
-- [decision] — agreed by [participants]
-
-## Action items
-- [ ] [task] — owner, due date
-- [ ] [task] — owner, due date
-
-## Notes for the AI
-Things I want surfaced next time this person/topic comes up.
-```
+- **`created-by:`** (`captain` or `agent`). When an AI writes half your notes,
+  it helps to see at a glance who started what.
+- **`status:`** on missions and ventures. It's what the `daily-brief`,
+  `shutdown` and `lint-folder` skills read.
 
 ## Pattern
 
-Templates are starting points, not contracts. Edit them as you learn what your business actually needs.
+Templates are starting points, not contracts. Edit them as you learn what your
+business needs. If you write the same structure three times, make it a
+template.

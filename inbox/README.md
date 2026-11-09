@@ -22,7 +22,13 @@ Optional subfolders if you want them (don't bother until you do):
 
 ## How to process the inbox
 
-Tell your AI: **"Process my inbox."** It reads what's new, pulls out what matters, updates or creates the right `wiki/` pages, and logs what it did. Then the original can stay here as a record or move to `archive/`.
+Tell your AI: **"Process my inbox."** The `process-inbox` skill reads what's new, shows you where each capture should go, and after your OK updates or creates the right `wiki/` pages, turns action items into missions, and logs what it did. Then the original can stay here as a record or move to `archive/`.
+
+A few habits that keep it clean:
+
+- **Meetings need consent.** Only record or transcribe when everyone knows. If part of it was off the record, leave that part out.
+- **A transcript is not a to-do list.** Commitments in it become missions with an owner and a date.
+- **Let files finish.** A recording or sync that's still running shouldn't be processed yet.
 
 ## Naming convention
 
